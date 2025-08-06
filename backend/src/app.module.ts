@@ -6,6 +6,7 @@ import { HealthController } from './health/health.controller';
 import { databaseConfig } from './config/database.config';
 import { UserModule } from './users/user.module';
 import { TaskModule } from './tasks/task.module';
+import { NoteModule } from './notes/note.module';
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { TaskModule } from './tasks/task.module';
     }),
     UserModule,
     TaskModule,
+    NoteModule,
   ],
   controllers: [HealthController],
   providers: [],

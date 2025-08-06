@@ -7,6 +7,9 @@ import { CreateTaskHandler } from './application/commands/create-task.handler';
 import { TaskCreatedEventHandler } from './application/events/task-created.handler';
 import { TaskController } from './infrastructure/controllers/task.controller';
 import { TaskService } from './application/services/task.service';
+import { GetTaskHandler } from './application/queries/get-task.handler';
+import { GetTasksByAssignedHandler } from './application/queries/get-tasks-by-assigned.handler';
+import { GetTasksByCreatedHandler } from './application/queries/get-tasks-by-created.handler';
 import { AutoEventRegistry } from '../shared/infrastructure/messaging/auto-event-registry';
 import { InMemoryEventBus } from '../shared/infrastructure/messaging/in-memory-event-bus';
 
@@ -30,6 +33,9 @@ import { InMemoryEventBus } from '../shared/infrastructure/messaging/in-memory-e
         CreateTaskHandler,
         TaskCreatedEventHandler,
         TaskService,
+        GetTaskHandler,
+        GetTasksByAssignedHandler,
+        GetTasksByCreatedHandler,
         AutoEventRegistry,
     ],
 })
