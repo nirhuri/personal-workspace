@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Inject } from '@nestjs/common';
 import { DiscoveryService } from '@nestjs/core';
 import { InMemoryEventBus } from './in-memory-event-bus';
 import { EVENT_HANDLER_METADATA } from '../../application/events/event-handler.decorator';
@@ -7,7 +7,7 @@ import { EVENT_HANDLER_METADATA } from '../../application/events/event-handler.d
 export class AutoEventRegistry {
     constructor(
         private readonly discoveryService: DiscoveryService,
-        private readonly eventBus: InMemoryEventBus
+        @Inject('EventBus') private readonly eventBus: InMemoryEventBus
     ) { }
 
     async registerAllHandlers(): Promise<void> {
@@ -15,6 +15,11 @@ export class AutoEventRegistry {
 
         for (const provider of providers) {
             const instance = provider.instance;
+
+            if (!instance || !instance.constructor) {
+                continue;
+            }
+
             const eventName = Reflect.getMetadata(EVENT_HANDLER_METADATA, instance.constructor);
 
             if (eventName && typeof instance.handle === 'function') {

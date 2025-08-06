@@ -1,5 +1,6 @@
 import { Module, OnModuleInit } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
+import { DiscoveryService } from '@nestjs/core';
 import { UserController } from './infrastructure/controllers/user.controller';
 import { CreateUserHandler } from './application/commands/create-user.handler';
 import { GetUserHandler } from './application/queries/get-user.handler';
@@ -18,6 +19,7 @@ import { AutoEventRegistry } from '@/shared/infrastructure/messaging/auto-event-
     ],
     controllers: [UserController],
     providers: [
+        DiscoveryService,
         CreateUserHandler,
         GetUserHandler,
         GetUserByEmailHandler,
