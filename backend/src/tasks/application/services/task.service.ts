@@ -3,12 +3,21 @@ import { TaskRepository } from '../../domain/repositories/tasks.repository';
 import { Task } from '../../domain/entities/task.entity';
 import { CreateTaskCommand } from '../commands/create-task.command';
 import { CreateTaskHandler } from '../commands/create-task.handler';
+import { GetTaskQuery } from '../queries/get-task.query';
+import { GetTaskHandler } from '../queries/get-task.handler';
+import { GetTasksByAssignedQuery } from '../queries/get-tasks-by-assigned.query';
+import { GetTasksByAssignedHandler } from '../queries/get-tasks-by-assigned.handler';
+import { GetTasksByCreatedQuery } from '../queries/get-tasks-by-created.query';
+import { GetTasksByCreatedHandler } from '../queries/get-tasks-by-created.handler';
 
 @Injectable()
 export class TaskService {
     constructor(
         @Inject('TaskRepository') private readonly taskRepository: TaskRepository,
-        private readonly createTaskHandler: CreateTaskHandler
+        private readonly createTaskHandler: CreateTaskHandler,
+        private readonly getTaskHandler: GetTaskHandler,
+        private readonly getTasksByAssignedHandler: GetTasksByAssignedHandler,
+        private readonly getTasksByCreatedHandler: GetTasksByCreatedHandler
     ) { }
 
     async createTask(createTaskDto: {
@@ -37,14 +46,17 @@ export class TaskService {
     }
 
     async getTask(id: string): Promise<Task | null> {
-        return await this.taskRepository.findById(id);
+        const query = new GetTaskQuery(id);
+        return await this.getTaskHandler.execute(query);
     }
 
     async getTasksByAssignedTo(userId: string): Promise<Task[]> {
-        return await this.taskRepository.findByAssignedTo(userId);
+        const query = new GetTasksByAssignedQuery(userId);
+        return await this.getTasksByAssignedHandler.execute(query);
     }
 
     async getTasksByCreatedBy(userId: string): Promise<Task[]> {
-        return await this.taskRepository.findByCreatedBy(userId);
+        const query = new GetTasksByCreatedQuery(userId);
+        return await this.getTasksByCreatedHandler.execute(query);
     }
 } 

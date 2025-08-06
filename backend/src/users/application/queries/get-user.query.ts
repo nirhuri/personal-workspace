@@ -1,11 +1,6 @@
 import { Query } from '../../../shared/application/queries/query';
+import { User } from '../../domain/entities/user.entity';
 
-export class GetUserQuery implements Query<any> {
-    readonly queryId: string;
-    readonly occurredOn: Date;
-
-    constructor(public readonly userId: string) {
-        this.queryId = `get_user_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-        this.occurredOn = new Date();
-    }
+export class GetUserQuery implements Query<User | null> {
+    constructor(public readonly userId: string) { }
 }

@@ -1,7 +1,7 @@
 // Base query interface
 export interface Query<TResult> {
-    readonly queryId: string;
-    readonly occurredOn: Date;
+    // Removed queryId and occurredOn since queries are read-only
+    // and don't need audit trail
 }
 
 // Base query handler interface
