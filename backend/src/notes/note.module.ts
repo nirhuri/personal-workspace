@@ -13,12 +13,14 @@ import { GetNotesSharedWithHandler } from './application/queries/get-notes-share
 import { GetAccessibleNotesHandler } from './application/queries/get-accessible-notes.handler';
 import { AutoEventRegistry } from '../shared/infrastructure/messaging/auto-event-registry';
 import { InMemoryEventBus } from '../shared/infrastructure/messaging/in-memory-event-bus';
+import { EventStoreModule } from '../shared/infrastructure/event-store/event-store.module';
 
 @Module({
     imports: [
         MongooseModule.forFeature([
             { name: NoteDocument.name, schema: NoteSchema }
-        ])
+        ]),
+        EventStoreModule,
     ],
     controllers: [NoteController],
     providers: [

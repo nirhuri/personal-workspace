@@ -7,6 +7,7 @@ import { databaseConfig } from './config/database.config';
 import { UserModule } from './users/user.module';
 import { TaskModule } from './tasks/task.module';
 import { NoteModule } from './notes/note.module';
+import { EventStoreModule } from './shared/infrastructure/event-store/event-store.module';
 
 @Module({
   imports: [
@@ -23,6 +24,7 @@ import { NoteModule } from './notes/note.module';
       }),
       inject: [ConfigService],
     }),
+    EventStoreModule,
     UserModule,
     TaskModule,
     NoteModule,

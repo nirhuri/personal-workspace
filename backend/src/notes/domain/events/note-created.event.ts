@@ -10,7 +10,7 @@ export class NoteCreatedEvent extends DomainEvent {
         public readonly status: string,
         public readonly sharedWith: string[]
     ) {
-        super(noteId);
+        super(noteId, 1); // Pass version 1 for new events
     }
 
     getEventName(): string {

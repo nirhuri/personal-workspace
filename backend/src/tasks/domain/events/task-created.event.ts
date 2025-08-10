@@ -10,7 +10,7 @@ export class TaskCreatedEvent extends DomainEvent {
         public readonly priority: string,
         public readonly dueDate?: Date
     ) {
-        super(taskId);
+        super(taskId, 1); // Pass version 1 for new events
     }
 
     getEventName(): string {

@@ -24,7 +24,7 @@ export class CreateUserHandler implements CommandHandler<CreateUserCommand> {
         await this.userRepository.save(user);
 
         await this.eventBus.publish(
-            new UserCreatedEvent(user.id, user.email, user.name)
+            new UserCreatedEvent(user.id, user.email, user.name, user.googleId, user.picture)
         );
     }
 }
