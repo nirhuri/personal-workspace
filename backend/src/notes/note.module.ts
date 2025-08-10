@@ -4,7 +4,13 @@ import { DiscoveryService } from '@nestjs/core';
 import { NoteDocument, NoteSchema } from './infrastructure/schemas/note.schema';
 import { NoteMongoRepository } from './infrastructure/repositories/note-mongo.repository';
 import { CreateNoteHandler } from './application/commands/create-note.handler';
+import { UpdateNoteHandler } from './application/commands/update-note.handler';
+import { DeleteNoteHandler } from './application/commands/delete-note.handler';
+import { ShareNoteHandler } from './application/commands/share-note.handler';
 import { NoteCreatedEventHandler } from './application/events/note-created.handler';
+import { NoteUpdatedEventHandler } from './application/events/note-updated.handler';
+import { NoteDeletedEventHandler } from './application/events/note-deleted.handler';
+import { NoteSharedEventHandler } from './application/events/note-shared.handler';
 import { NoteController } from './infrastructure/controllers/note.controller';
 import { NoteService } from './application/services/note.service';
 import { GetNoteHandler } from './application/queries/get-note.handler';
@@ -33,13 +39,23 @@ import { EventStoreModule } from '../shared/infrastructure/event-store/event-sto
             provide: 'EventBus',
             useClass: InMemoryEventBus,
         },
+        // Commands
         CreateNoteHandler,
+        UpdateNoteHandler,
+        DeleteNoteHandler,
+        ShareNoteHandler,
+        // Events
         NoteCreatedEventHandler,
-        NoteService,
+        NoteUpdatedEventHandler,
+        NoteDeletedEventHandler,
+        NoteSharedEventHandler,
+        // Queries
         GetNoteHandler,
         GetNotesByCreatedHandler,
         GetNotesSharedWithHandler,
         GetAccessibleNotesHandler,
+        // Services
+        NoteService,
         AutoEventRegistry,
     ],
 })
@@ -49,4 +65,4 @@ export class NoteModule implements OnModuleInit {
     onModuleInit() {
         this.autoEventRegistry.registerAllHandlers();
     }
-} 
+}

@@ -1,4 +1,4 @@
-import { Controller, Post, Get, Body, Param } from '@nestjs/common';
+import { Controller, Post, Get, Body, Param, Put, Delete } from '@nestjs/common';
 import { NoteService } from '../../application/services/note.service';
 import { CreateNoteDto } from '../dtos/create-note.dto';
 import { Note } from '../../domain/entities/note.entity';
@@ -8,6 +8,47 @@ export class NoteController {
     constructor(
         private readonly noteService: NoteService
     ) { }
+
+    @Put(':id')
+    async updateNote(
+        @Param('id') id: string,
+        @Body() updateNoteDto: {
+            title?: string;
+            content?: string;
+            updatedBy: string;
+        }
+    ): Promise<{ message: string; noteId: string }> {
+        return await this.noteService.updateNote({
+            noteId: id,
+            ...updateNoteDto
+        });
+    }
+
+    @Delete(':id')
+    async deleteNote(
+        @Param('id') id: string,
+        @Body() deleteNoteDto: { deletedBy: string }
+    ): Promise<{ message: string; noteId: string }> {
+        return await this.noteService.deleteNote({
+            noteId: id,
+            ...deleteNoteDto
+        });
+    }
+
+    @Post(':id/share')
+    async shareNote(
+        @Param('id') id: string,
+        @Body() shareNoteDto: {
+            userId: string;
+            sharedBy: string;
+            action: 'ADD' | 'REMOVE';
+        }
+    ): Promise<{ message: string; noteId: string }> {
+        return await this.noteService.shareNote({
+            noteId: id,
+            ...shareNoteDto
+        });
+    }
 
     @Post()
     async createNote(@Body() createNoteDto: CreateNoteDto): Promise<{ message: string; noteId: string }> {

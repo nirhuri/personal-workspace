@@ -11,12 +11,21 @@ import { GetNotesSharedWithQuery } from '../queries/get-notes-shared-with.query'
 import { GetNotesSharedWithHandler } from '../queries/get-notes-shared-with.handler';
 import { GetAccessibleNotesQuery } from '../queries/get-accessible-notes.query';
 import { GetAccessibleNotesHandler } from '../queries/get-accessible-notes.handler';
+import { UpdateNoteHandler } from '../commands/update-note.handler';
+import { DeleteNoteHandler } from '../commands/delete-note.handler';
+import { ShareNoteHandler } from '../commands/share-note.handler';
+import { UpdateNoteCommand } from '../commands/update-note.command';
+import { DeleteNoteCommand } from '../commands/delete-note.command';
+import { ShareNoteCommand } from '../commands/share-note.command';
 
 @Injectable()
 export class NoteService {
     constructor(
         @Inject('NoteRepository') private readonly noteRepository: NoteRepository,
         private readonly createNoteHandler: CreateNoteHandler,
+        private readonly updateNoteHandler: UpdateNoteHandler,
+        private readonly deleteNoteHandler: DeleteNoteHandler,
+        private readonly shareNoteHandler: ShareNoteHandler,
         private readonly getNoteHandler: GetNoteHandler,
         private readonly getNotesByCreatedHandler: GetNotesByCreatedHandler,
         private readonly getNotesSharedWithHandler: GetNotesSharedWithHandler,
@@ -43,6 +52,65 @@ export class NoteService {
         return {
             message: 'Note created successfully',
             noteId: command.commandId
+        };
+    }
+
+    async updateNote(updateNoteDto: {
+        noteId: string;
+        title?: string;
+        content?: string;
+        updatedBy: string;
+    }): Promise<{ message: string; noteId: string }> {
+        const command = new UpdateNoteCommand(
+            updateNoteDto.noteId,
+            updateNoteDto.updatedBy,
+            updateNoteDto.title,
+            updateNoteDto.content
+        );
+
+        await this.updateNoteHandler.execute(command);
+
+        return {
+            message: 'Note updated successfully',
+            noteId: updateNoteDto.noteId
+        };
+    }
+
+    async deleteNote(deleteNoteDto: {
+        noteId: string;
+        deletedBy: string;
+    }): Promise<{ message: string; noteId: string }> {
+        const command = new DeleteNoteCommand(
+            deleteNoteDto.noteId,
+            deleteNoteDto.deletedBy
+        );
+
+        await this.deleteNoteHandler.execute(command);
+
+        return {
+            message: 'Note deleted successfully',
+            noteId: deleteNoteDto.noteId
+        };
+    }
+
+    async shareNote(shareNoteDto: {
+        noteId: string;
+        userId: string;
+        sharedBy: string;
+        action: 'ADD' | 'REMOVE';
+    }): Promise<{ message: string; noteId: string }> {
+        const command = new ShareNoteCommand(
+            shareNoteDto.noteId,
+            shareNoteDto.userId,
+            shareNoteDto.sharedBy,
+            shareNoteDto.action
+        );
+
+        await this.shareNoteHandler.execute(command);
+
+        return {
+            message: `Note ${shareNoteDto.action === 'ADD' ? 'shared with' : 'unshared from'} user successfully`,
+            noteId: shareNoteDto.noteId
         };
     }
 
