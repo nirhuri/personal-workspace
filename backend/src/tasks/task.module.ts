@@ -4,6 +4,9 @@ import { DiscoveryService } from '@nestjs/core';
 import { TaskDocument, TaskSchema } from './infrastructure/schemas/task.schema';
 import { TaskMongoRepository } from './infrastructure/repositories/task-mongo.repository';
 import { CreateTaskHandler } from './application/commands/create-task.handler';
+import { UpdateTaskHandler } from './application/commands/update-task.handler';
+import { DeleteTaskHandler } from './application/commands/delete-task.handler';
+import { CompleteTaskHandler } from './application/commands/complete-task.handler';
 import { TaskCreatedEventHandler } from './application/events/task-created.handler';
 import { TaskController } from './infrastructure/controllers/task.controller';
 import { TaskService } from './application/services/task.service';
@@ -31,6 +34,9 @@ import { InMemoryEventBus } from '../shared/infrastructure/messaging/in-memory-e
             useClass: InMemoryEventBus,
         },
         CreateTaskHandler,
+        UpdateTaskHandler,
+        DeleteTaskHandler,
+        CompleteTaskHandler,
         TaskCreatedEventHandler,
         TaskService,
         GetTaskHandler,

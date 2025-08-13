@@ -1,31 +1,27 @@
-import { IsString, IsNotEmpty, IsEnum, IsOptional, IsDateString, IsArray, ArrayMaxSize, MaxLength, MinLength } from 'class-validator';
+import { IsString, IsOptional, IsEnum, IsDateString, IsArray, ArrayMaxSize, MaxLength, MinLength } from 'class-validator';
 import { TaskPriority } from '../../domain/entities/task.entity';
 
-export class CreateTaskDto {
+export class UpdateTaskDto {
+    @IsOptional()
     @IsString()
-    @IsNotEmpty()
     @MinLength(1)
     @MaxLength(200)
-    title: string;
+    title?: string;
 
+    @IsOptional()
     @IsString()
-    @IsNotEmpty()
     @MinLength(1)
     @MaxLength(1000)
-    description: string;
+    description?: string;
 
+    @IsOptional()
     @IsEnum(TaskPriority)
-    priority: TaskPriority;
+    priority?: TaskPriority;
 
+    @IsOptional()
     @IsString()
-    @IsNotEmpty()
     @MinLength(1)
-    assignedTo: string;
-
-    @IsString()
-    @IsNotEmpty()
-    @MinLength(1)
-    createdBy: string;
+    assignedTo?: string;
 
     @IsOptional()
     @IsDateString()

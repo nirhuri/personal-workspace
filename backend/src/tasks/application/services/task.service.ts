@@ -3,6 +3,12 @@ import { TaskRepository } from '../../domain/repositories/tasks.repository';
 import { Task } from '../../domain/entities/task.entity';
 import { CreateTaskCommand } from '../commands/create-task.command';
 import { CreateTaskHandler } from '../commands/create-task.handler';
+import { UpdateTaskCommand } from '../commands/update-task.command';
+import { UpdateTaskHandler } from '../commands/update-task.handler';
+import { DeleteTaskCommand } from '../commands/delete-task.command';
+import { DeleteTaskHandler } from '../commands/delete-task.handler';
+import { CompleteTaskCommand } from '../commands/complete-task.command';
+import { CompleteTaskHandler } from '../commands/complete-task.handler';
 import { GetTaskQuery } from '../queries/get-task.query';
 import { GetTaskHandler } from '../queries/get-task.handler';
 import { GetTasksByAssignedQuery } from '../queries/get-tasks-by-assigned.query';
@@ -15,6 +21,9 @@ export class TaskService {
     constructor(
         @Inject('TaskRepository') private readonly taskRepository: TaskRepository,
         private readonly createTaskHandler: CreateTaskHandler,
+        private readonly updateTaskHandler: UpdateTaskHandler,
+        private readonly deleteTaskHandler: DeleteTaskHandler,
+        private readonly completeTaskHandler: CompleteTaskHandler,
         private readonly getTaskHandler: GetTaskHandler,
         private readonly getTasksByAssignedHandler: GetTasksByAssignedHandler,
         private readonly getTasksByCreatedHandler: GetTasksByCreatedHandler
@@ -42,6 +51,69 @@ export class TaskService {
         return {
             message: 'Task created successfully',
             taskId: command.commandId
+        };
+    }
+
+    async updateTask(updateTaskDto: {
+        taskId: string;
+        updatedBy: string;
+        title?: string;
+        description?: string;
+        priority?: string;
+        assignedTo?: string;
+        dueDate?: Date;
+        tags?: string[];
+    }): Promise<{ message: string; taskId: string }> {
+        const command = new UpdateTaskCommand(
+            updateTaskDto.taskId,
+            updateTaskDto.updatedBy,
+            updateTaskDto.title,
+            updateTaskDto.description,
+            updateTaskDto.priority,
+            updateTaskDto.assignedTo,
+            updateTaskDto.dueDate,
+            updateTaskDto.tags
+        );
+
+        await this.updateTaskHandler.execute(command);
+
+        return {
+            message: 'Task updated successfully',
+            taskId: updateTaskDto.taskId
+        };
+    }
+
+    async deleteTask(deleteTaskDto: {
+        taskId: string;
+        deletedBy: string;
+    }): Promise<{ message: string; taskId: string }> {
+        const command = new DeleteTaskCommand(
+            deleteTaskDto.taskId,
+            deleteTaskDto.deletedBy
+        );
+
+        await this.deleteTaskHandler.execute(command);
+
+        return {
+            message: 'Task deleted successfully',
+            taskId: deleteTaskDto.taskId
+        };
+    }
+
+    async completeTask(completeTaskDto: {
+        taskId: string;
+        completedBy: string;
+    }): Promise<{ message: string; taskId: string }> {
+        const command = new CompleteTaskCommand(
+            completeTaskDto.taskId,
+            completeTaskDto.completedBy
+        );
+
+        await this.completeTaskHandler.execute(command);
+
+        return {
+            message: 'Task completed successfully',
+            taskId: completeTaskDto.taskId
         };
     }
 

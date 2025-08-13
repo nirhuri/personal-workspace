@@ -10,6 +10,7 @@ import { UserMongoRepository } from './infrastructure/repositories/user-mongo.re
 import { UserDocument, UserSchema } from './infrastructure/schemas/user.schema';
 import { InMemoryEventBus } from '../shared/infrastructure/messaging/in-memory-event-bus';
 import { AutoEventRegistry } from '@/shared/infrastructure/messaging/auto-event-registry';
+import { UserService } from './application/services/user.service';
 
 @Module({
     imports: [
@@ -26,6 +27,7 @@ import { AutoEventRegistry } from '@/shared/infrastructure/messaging/auto-event-
         UserCreatedHandler,
         UserMongoRepository,
         AutoEventRegistry,
+        UserService,
         {
             provide: 'UserRepository',
             useClass: UserMongoRepository,
@@ -38,6 +40,7 @@ import { AutoEventRegistry } from '@/shared/infrastructure/messaging/auto-event-
     exports: [
         'UserRepository',
         UserMongoRepository,
+        UserService,
     ],
 })
 export class UserModule implements OnModuleInit {
