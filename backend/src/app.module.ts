@@ -8,6 +8,8 @@ import { UserModule } from './users/user.module';
 import { TaskModule } from './tasks/task.module';
 import { NoteModule } from './notes/note.module';
 import { EventStoreModule } from './shared/infrastructure/event-store/event-store.module';
+import { AuthModule } from './auth/auth.module';
+import { CalendarModule } from './calendar/calendar.module';
 
 @Module({
   imports: [
@@ -28,6 +30,8 @@ import { EventStoreModule } from './shared/infrastructure/event-store/event-stor
     UserModule,
     TaskModule,
     NoteModule,
+    AuthModule,
+    CalendarModule,
   ],
   controllers: [HealthController],
   providers: [],

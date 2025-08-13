@@ -35,6 +35,10 @@ import { AutoEventRegistry } from '@/shared/infrastructure/messaging/auto-event-
             useClass: InMemoryEventBus,
         },
     ],
+    exports: [
+        'UserRepository',
+        UserMongoRepository,
+    ],
 })
 export class UserModule implements OnModuleInit {
     constructor(
