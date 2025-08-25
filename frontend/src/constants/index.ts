@@ -1,50 +1,50 @@
 // Navigation constants
 export const NAV_ITEMS = [
-    { path: '/', label: 'דשבורד', icon: '🏠' },
-    { path: '/notes', label: 'פתקים', icon: '📝' },
-    { path: '/tasks', label: 'משימות', icon: '✅' },
-    { path: '/calendar', label: 'יומן', icon: '📅' },
+    { path: '/', label: 'Dashboard', icon: '🏠' },
+    { path: '/notes', label: 'Notes', icon: '📝' },
+    { path: '/tasks', label: 'Tasks', icon: '✅' },
+    { path: '/calendar', label: 'Calendar', icon: '📅' },
 ];
 
 // Priority options
 export const PRIORITY_OPTIONS = [
-    { value: 'low', label: 'נמוך', color: 'blue' },
-    { value: 'medium', label: 'בינוני', color: 'orange' },
-    { value: 'high', label: 'גבוה', color: 'red' },
+    { value: 'low', label: 'Low', color: 'blue' },
+    { value: 'medium', label: 'Medium', color: 'orange' },
+    { value: 'high', label: 'High', color: 'red' },
 ];
 
 // Task status options
 export const TASK_STATUS_OPTIONS = [
-    { value: 'active', label: 'פעיל', color: 'green' },
-    { value: 'completed', label: 'הושלם', color: 'gray' },
-    { value: 'all', label: 'הכל', color: 'blue' },
+    { value: 'active', label: 'Active', color: 'green' },
+    { value: 'completed', label: 'Done', color: 'gray' },
+    { value: 'all', label: 'All', color: 'blue' },
 ];
 
 // Event types
 export const EVENT_TYPES = [
-    { value: 'meeting', label: 'פגישה', color: 'blue' },
-    { value: 'call', label: 'שיחה', color: 'green' },
-    { value: 'planning', label: 'תכנון', color: 'purple' },
-    { value: 'other', label: 'אחר', color: 'gray' },
+    { value: 'meeting', label: 'Meeting', color: 'blue' },
+    { value: 'call', label: 'Call', color: 'green' },
+    { value: 'planning', label: 'Planning', color: 'purple' },
+    { value: 'other', label: 'Other', color: 'gray' },
 ];
 
 // Recurrence frequencies
 export const RECURRENCE_FREQUENCIES = [
-    { value: 'daily', label: 'יומי' },
-    { value: 'weekly', label: 'שבועי' },
-    { value: 'monthly', label: 'חודשי' },
-    { value: 'yearly', label: 'שנתי' },
+    { value: 'daily', label: 'Calendar' },
+    { value: 'weekly', label: 'Weekly' },
+    { value: 'monthly', label: 'Monthly' },
+    { value: 'yearly', label: 'Yearly' },
 ];
 
 // Color options for notes and events
 export const COLOR_OPTIONS = [
-    { value: 'blue', label: 'כחול', hex: '#3B82F6' },
-    { value: 'green', label: 'ירוק', hex: '#10B981' },
-    { value: 'yellow', label: 'צהוב', hex: '#F59E0B' },
-    { value: 'red', label: 'אדום', hex: '#EF4444' },
-    { value: 'purple', label: 'סגול', hex: '#8B5CF6' },
-    { value: 'pink', label: 'ורוד', hex: '#EC4899' },
-    { value: 'gray', label: 'אפור', hex: '#6B7280' },
+    { value: 'blue', label: 'Blue', hex: '#3B82F6' },
+    { value: 'green', label: 'Green', hex: '#10B981' },
+    { value: 'yellow', label: 'Yellow', hex: '#F59E0B' },
+    { value: 'red', label: 'Red', hex: '#EF4444' },
+    { value: 'purple', label: 'Purple', hex: '#8B5CF6' },
+    { value: 'pink', label: 'Pink', hex: '#EC4899' },
+    { value: 'gray', label: 'Gray', hex: '#6B7280' },
 ];
 
 // Date formats
@@ -135,25 +135,25 @@ export const TIME_INTERVALS = {
 
 // Error messages
 export const ERROR_MESSAGES = {
-    NETWORK_ERROR: 'שגיאת רשת. אנא בדוק את החיבור שלך.',
-    UNAUTHORIZED: 'אין לך הרשאה לבצע פעולה זו.',
-    FORBIDDEN: 'פעולה זו אסורה.',
-    NOT_FOUND: 'הפריט המבוקש לא נמצא.',
-    VALIDATION_ERROR: 'הנתונים שהוזנו אינם תקינים.',
-    SERVER_ERROR: 'שגיאת שרת. אנא נסה שוב מאוחר יותר.',
-    UNKNOWN_ERROR: 'שגיאה לא ידועה. אנא נסה שוב.',
+    NETWORK_ERROR: 'Network error. Please check your connection.',
+    UNAUTHORIZED: 'You do not have permission to perform this action.',
+    FORBIDDEN: 'This action is forbidden.',
+    NOT_FOUND: 'The requested item was not found.',
+    VALIDATION_ERROR: 'The entered data is invalid.',
+    SERVER_ERROR: 'Server error. Please try again later.',
+    UNKNOWN_ERROR: 'Unknown error. Please try again.',
 };
 
 // Success messages
 export const SUCCESS_MESSAGES = {
-    NOTE_CREATED: 'הפתק נוצר בהצלחה.',
-    NOTE_UPDATED: 'הפתק עודכן בהצלחה.',
-    NOTE_DELETED: 'הפתק נמחק בהצלחה.',
-    TASK_CREATED: 'המשימה נוצרה בהצלחה.',
-    TASK_UPDATED: 'המשימה עודכנה בהצלחה.',
-    TASK_DELETED: 'המשימה נמחקה בהצלחה.',
-    EVENT_CREATED: 'האירוע נוצר בהצלחה.',
-    EVENT_UPDATED: 'האירוע עודכן בהצלחה.',
-    EVENT_DELETED: 'האירוע נמחק בהצלחה.',
-    SETTINGS_SAVED: 'ההגדרות נשמרו בהצלחה.',
-}; 
+    NOTE_CREATED: 'Note created successfully.',
+    NOTE_UPDATED: 'Note updated successfully.',
+    NOTE_DELETED: 'Note deleted successfully.',
+    TASK_CREATED: 'Task created successfully.',
+    TASK_UPDATED: 'Task updated successfully.',
+    TASK_DELETED: 'Task deleted successfully.',
+    EVENT_CREATED: 'Event created successfully.',
+    EVENT_UPDATED: 'Event updated successfully.',
+    EVENT_DELETED: 'Event deleted successfully.',
+    SETTINGS_SAVED: 'Settings saved successfully.',
+};

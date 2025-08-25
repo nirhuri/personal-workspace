@@ -2,6 +2,7 @@ import React from 'react';
 import Card from '../ui/Card';
 import Badge from '../ui/Badge';
 import { Task } from '../../types';
+import { getDueDate } from '../../services/date.service';
 
 interface RecentTasksProps {
     tasks: Task[];
@@ -10,17 +11,6 @@ interface RecentTasksProps {
 }
 
 const RecentTasks: React.FC<RecentTasksProps> = ({ tasks, onTaskToggle, onTaskClick }) => {
-    const formatDate = (date: Date) => {
-        const now = new Date();
-        const diffTime = Math.abs(now.getTime() - date.getTime());
-        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-
-        if (diffDays === 0) return 'היום';
-        if (diffDays === 1) return 'מחר';
-        if (diffDays < 7) return `עד: ${diffDays} ימים`;
-        return `עד: ${date.toLocaleDateString('he-IL')}`;
-    };
-
     const getPriorityColor = (priority: Task['priority']) => {
         switch (priority) {
             case 'high': return 'danger';
@@ -42,7 +32,7 @@ const RecentTasks: React.FC<RecentTasksProps> = ({ tasks, onTaskToggle, onTaskCl
     return (
         <Card className="p-6">
             <div className="flex items-center justify-between mb-6">
-                <h2 className="text-xl font-semibold text-gray-800">משימות אחרונות</h2>
+                <h2 className="text-xl font-semibold text-gray-800">Recent Tasks</h2>
                 <span className="text-2xl">✅</span>
             </div>
             <div className="space-y-4">
@@ -68,7 +58,7 @@ const RecentTasks: React.FC<RecentTasksProps> = ({ tasks, onTaskToggle, onTaskCl
                                         {task.title}
                                     </h3>
                                     {task.dueDate && (
-                                        <p className="text-sm text-gray-600">{formatDate(task.dueDate)}</p>
+                                        <p className="text-sm text-gray-600">{getDueDate(task.dueDate)}</p>
                                     )}
                                 </div>
                             </div>
@@ -76,8 +66,8 @@ const RecentTasks: React.FC<RecentTasksProps> = ({ tasks, onTaskToggle, onTaskCl
                                 variant={getPriorityColor(task.priority)}
                                 size="sm"
                             >
-                                {task.priority === 'high' ? 'גבוה' :
-                                    task.priority === 'medium' ? 'בינוני' : 'נמוך'}
+                                {task.priority === 'high' ? 'High' :
+                                    task.priority === 'medium' ? 'Medium' : 'Low'}
                             </Badge>
                         </div>
                     </div>

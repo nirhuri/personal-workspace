@@ -8,22 +8,22 @@ interface RecentNotesProps {
     onNoteClick?: (note: Note) => void;
 }
 
+const formatDate = (date: Date) => {
+    const now = new Date();
+    const diffTime = Math.abs(now.getTime() - date.getTime());
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+    if (diffDays === 0) return 'Today';
+    if (diffDays === 1) return 'Yesterday';
+    if (diffDays < 7) return `${diffDays} days ago`;
+    return date.toLocaleDateString();
+};
+
 const RecentNotes: React.FC<RecentNotesProps> = ({ notes, onNoteClick }) => {
-    const formatDate = (date: Date) => {
-        const now = new Date();
-        const diffTime = Math.abs(now.getTime() - date.getTime());
-        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-
-        if (diffDays === 0) return 'היום';
-        if (diffDays === 1) return 'אתמול';
-        if (diffDays < 7) return `לפני ${diffDays} ימים`;
-        return date.toLocaleDateString('he-IL');
-    };
-
     return (
         <Card className="p-6">
             <div className="flex items-center justify-between mb-6">
-                <h2 className="text-xl font-semibold text-gray-800">פתקים אחרונים</h2>
+                <h2 className="text-xl font-semibold text-gray-800">Recent Notes</h2>
                 <span className="text-2xl">📝</span>
             </div>
             <div className="space-y-4">
@@ -49,7 +49,7 @@ const RecentNotes: React.FC<RecentNotesProps> = ({ notes, onNoteClick }) => {
                                 variant={note.isShared ? 'success' : 'warning'}
                                 size="sm"
                             >
-                                {note.isShared ? 'משותף' : 'חשוב'}
+                                {note.isShared ? 'Shared' : 'Private'}
                             </Badge>
                         </div>
                     </div>

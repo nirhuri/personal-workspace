@@ -26,10 +26,21 @@ export const getRelativeDate = (date: Date): string => {
     const diffTime = eventDate.getTime() - now.getTime();
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 
-    if (diffDays === 0) return 'היום';
-    if (diffDays === 1) return 'מחר';
-    if (diffDays < 7) return `בעוד ${diffDays} ימים`;
+    if (diffDays === 0) return 'Today';
+    if (diffDays === 1) return 'Tomorrow';
+    if (diffDays < 7) return `In ${diffDays} days`;
     return eventDate.toLocaleDateString('he-IL');
+};
+
+export const getDueDate = (date: Date) => {
+    const now = new Date();
+    const diffTime = Math.abs(now.getTime() - date.getTime());
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+    if (diffDays === 0) return 'Today';
+    if (diffDays === 1) return 'Tomorrow';
+    if (diffDays < 7) return `Due: ${diffDays} days`;
+    return `Due: ${date.toLocaleDateString('he-IL')}`;
 };
 
 export const isToday = (date: Date): boolean => {

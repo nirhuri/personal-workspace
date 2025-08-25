@@ -118,8 +118,8 @@ const Dashboard: React.FC = () => {
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
                 {/* כותרת ראשית */}
                 <div className="mb-8">
-                    <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-2">ברוכים הבאים!</h1>
-                    <p className="text-gray-600">הנה סקירה מהירה של היום שלך</p>
+                    <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-2">Welcome!</h1>
+                    <p className="text-gray-600">Here is an overview of your day</p>
                 </div>
 
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">

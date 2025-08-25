@@ -3,6 +3,7 @@ import Card from '../ui/Card';
 import Badge from '../ui/Badge';
 import Icon from '../ui/Icon';
 import { CalendarEvent } from '../../types';
+import { formatTime, getRelativeDate } from '../../services/date.service';
 
 interface UpcomingEventsProps {
     events: CalendarEvent[];
@@ -10,25 +11,6 @@ interface UpcomingEventsProps {
 }
 
 const UpcomingEvents: React.FC<UpcomingEventsProps> = ({ events, onEventClick }) => {
-    const formatTime = (date: Date) => {
-        return date.toLocaleTimeString('he-IL', {
-            hour: '2-digit',
-            minute: '2-digit'
-        });
-    };
-
-    const formatDate = (date: Date) => {
-        const now = new Date();
-        const eventDate = new Date(date);
-        const diffTime = eventDate.getTime() - now.getTime();
-        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-
-        if (diffDays === 0) return 'היום';
-        if (diffDays === 1) return 'מחר';
-        if (diffDays < 7) return `בעוד ${diffDays} ימים`;
-        return eventDate.toLocaleDateString('he-IL');
-    };
-
     const getEventColor = (title: string) => {
         if (title.includes('צוות')) return 'primary';
         if (title.includes('לקוח')) return 'success';
@@ -46,7 +28,7 @@ const UpcomingEvents: React.FC<UpcomingEventsProps> = ({ events, onEventClick })
     return (
         <Card className="p-6 lg:col-span-2">
             <div className="flex items-center justify-between mb-6">
-                <h2 className="text-xl font-semibold text-gray-800">פגישות קרובות</h2>
+                <h2 className="text-xl font-semibold text-gray-800">Upcoming Meetings</h2>
                 <span className="text-2xl">📅</span>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -62,7 +44,7 @@ const UpcomingEvents: React.FC<UpcomingEventsProps> = ({ events, onEventClick })
                                 variant={getEventColor(event.title)}
                                 size="sm"
                             >
-                                {formatDate(event.startDate)}
+                                {getRelativeDate(event.startDate)}
                             </Badge>
                         </div>
                         {event.description && (
