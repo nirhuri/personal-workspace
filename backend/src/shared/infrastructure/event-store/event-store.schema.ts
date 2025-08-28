@@ -15,8 +15,8 @@ export class EventStoreDocument extends Document {
     @Prop({ required: true })
     eventType: string;
 
-    @Prop({ required: true })
-    eventData: any;
+    @Prop({ type: Object, required: true })
+    eventData: Record<string, any>;
 
     @Prop({ required: true })
     version: number;

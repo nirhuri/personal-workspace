@@ -7,19 +7,17 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import helmet from 'helmet';
 import { GlobalExceptionFilter } from './shared/infrastructure/filters/global-exception.filter';
 import { CustomValidationPipe } from './shared/infrastructure/pipes/validation.pipe';
+import { ResponseInterceptor } from './shared/infrastructure/interceptors/response.interceptor';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
   const configService = app.get(ConfigService);
 
-  // Security headers
   app.use(helmet());
 
-  // Global exception filter
   app.useGlobalFilters(new GlobalExceptionFilter());
-
-  // Global validation pipe
+  app.useGlobalInterceptors(new ResponseInterceptor());
   app.useGlobalPipes(new CustomValidationPipe());
 
   // CORS

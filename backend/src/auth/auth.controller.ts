@@ -7,13 +7,13 @@ export class AuthController {
     constructor(private readonly authService: AuthService) { }
 
     @Get('google')
-    @UseGuards(AuthGuard('google'))
+    // @UseGuards(AuthGuard('google'))
     async googleAuth() {
         return { message: 'Redirecting to Google OAuth' };
     }
 
     @Get('google/callback')
-    @UseGuards(AuthGuard('google'))
+    // @UseGuards(AuthGuard('google'))
     async googleAuthRedirect(@Req() req: any) {
         const user = req.user;
         const token = await this.authService.signToken(user);
