@@ -27,4 +27,14 @@ const Card: React.FC<CardProps> = ({
     );
 };
 
+export const CardContent: React.FC<React.HTMLAttributes<HTMLDivElement>> = ({
+    children,
+    className,
+    ...props
+}) => (
+    <div {...props} className={`p-6 ${className}`}>
+        {children}
+    </div>
+);
+
 export default Card; 

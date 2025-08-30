@@ -1,53 +1,72 @@
-import React from 'react';
+// pages/Notes.tsx
+import React, { useState } from 'react';
 import PageHeader from '../components/layout/PageHeader';
 import NoteCard from '../components/notes/NoteCard';
 import { Note } from '../types';
+import { NoteForm } from '../components/notes/NoteForm';
+import { motion, AnimatePresence } from 'framer-motion';
 
 const Notes: React.FC = () => {
-    // Mock data - בהמשך זה יבוא מה-API
-    const mockNotes: Note[] = [
+    const [notes, setNotes] = useState<Note[]>([
         {
             id: '1',
             title: 'פגישה עם הלקוח',
-            content: 'דיון על דרישות הפרויקט החדש. צריך להכין מצגת עם האפשרויות השונות ולבדוק את התקציב.',
+            content:
+                'דיון על דרישות הפרויקט החדש. צריך להכין מצגת עם האפשרויות השונות ולבדוק את התקציב.',
             createdAt: new Date(),
             updatedAt: new Date(),
             isShared: false,
-            createdBy: 'user1'
+            createdBy: 'user1',
         },
         {
             id: '2',
-            title: 'רעיונות לפיצ\'רים',
-            content: 'רשימת רעיונות לפיתוח האפליקציה: אינטגרציה עם Slack, התראות מתקדמות, תמיכה ב-dark mode.',
+            title: "רעיונות לפיצ'רים",
+            content:
+                'רשימת רעיונות לפיתוח האפליקציה: אינטגרציה עם Slack, התראות מתקדמות, תמיכה ב-dark mode.',
             createdAt: new Date(Date.now() - 86400000),
             updatedAt: new Date(Date.now() - 86400000),
             isShared: true,
-            createdBy: 'user1'
+            createdBy: 'user1',
         },
         {
             id: '3',
             title: 'רשימת קניות',
-            content: 'חלב, לחם, ירקות, בשר, תבלינים. לא לשכוח לקנות גם פירות וירקות טריים.',
+            content:
+                'חלב, לחם, ירקות, בשר, תבלינים. לא לשכוח לקנות גם פירות וירקות טריים.',
             createdAt: new Date(Date.now() - 259200000),
             updatedAt: new Date(Date.now() - 259200000),
             isShared: false,
-            createdBy: 'user1'
-        }
-    ];
+            createdBy: 'user1',
+        },
+    ]);
+
+    const [isModalOpen, setIsModalOpen] = useState(false);
 
     const handleAddNote = () => {
-        console.log('Add note clicked');
-        // בהמשך זה יפתח מודל להוספת פתק
+        setIsModalOpen(true);
+    };
+
+    const handleCreateNote = (note: any) => {
+        const newNote: Note = {
+            id: (notes.length + 1).toString(),
+            title: note.title,
+            content: note.content,
+            createdAt: new Date(),
+            updatedAt: new Date(),
+            isShared: note.type !== 'personal',
+            createdBy: 'user1',
+        };
+        setNotes([newNote, ...notes]);
+        setIsModalOpen(false);
     };
 
     const handleEditNote = (note: Note) => {
         console.log('Edit note:', note);
-        // בהמשך זה יפתח מודל לעריכת פתק
+        // כאן תוכל לפתוח את המודל עם הערך הקיים לעריכה
     };
 
     const handleDeleteNote = (noteId: string) => {
-        console.log('Delete note:', noteId);
-        // בהמשך זה ימחק את הפתק
+        setNotes(notes.filter((note) => note.id !== noteId));
     };
 
     return (
@@ -62,7 +81,7 @@ const Notes: React.FC = () => {
                 />
 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {mockNotes.map((note) => (
+                    {notes.map((note) => (
                         <NoteCard
                             key={note.id}
                             note={note}
@@ -72,8 +91,35 @@ const Notes: React.FC = () => {
                     ))}
                 </div>
             </div>
+
+            {/* Modal */}
+            <AnimatePresence>
+                {isModalOpen && (
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
+                    >
+                        <motion.div
+                            initial={{ scale: 0.8 }}
+                            animate={{ scale: 1 }}
+                            exit={{ scale: 0.8 }}
+                            className="bg-white rounded-2xl p-6 w-full max-w-lg shadow-xl relative"
+                        >
+                            <button
+                                onClick={() => setIsModalOpen(false)}
+                                className="absolute top-4 right-4 text-gray-500 hover:text-gray-700 font-bold"
+                            >
+                                ✕
+                            </button>
+                            <NoteForm onSubmit={handleCreateNote} />
+                        </motion.div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
         </div>
     );
 };
 
-export default Notes; 
+export default Notes;
