@@ -4,6 +4,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
 import { HealthController } from './health/health.controller';
 import { databaseConfig } from './config/database.config';
+import { frontendConfig } from './config/frontend.config';
 import { UserModule } from './users/user.module';
 import { TaskModule } from './tasks/task.module';
 import { NoteModule } from './notes/note.module';
@@ -15,7 +16,7 @@ import { CalendarModule } from './calendar/calendar.module';
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
-      load: [databaseConfig],
+      load: [databaseConfig, frontendConfig],
       envFilePath: '.env',
     }),
     MongooseModule.forRootAsync({

@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { NAV_ITEMS } from '../constants';
+import { useAuth } from '../auth/AuthContext';
 
 const Navigation: React.FC = () => {
+    const { logout } = useAuth();
     const location = useLocation();
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
@@ -33,8 +35,8 @@ const Navigation: React.FC = () => {
                     </div>
 
                     <div className="flex items-center space-x-4">
-                        <button className="bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 shadow-md hover:shadow-lg">
-                            Login with Google
+                        <button onClick={logout} className="bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 shadow-md hover:shadow-lg">
+                            Disconnect
                         </button>
 
                         {/* Mobile Hamburger Menu */}
