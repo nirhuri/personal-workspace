@@ -1,5 +1,5 @@
 import { removeEmailDomain } from "@/services/email.service";
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef } from "react";
 
 interface InlineChipsInputProps {
     value: string[];
