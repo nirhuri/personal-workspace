@@ -177,4 +177,9 @@ export interface UserSettings {
         shareByDefault: boolean;
         allowSharing: boolean;
     };
-} 
+}
+
+export enum NoteType {
+    PERSONAL = 'PERSONAL',
+    SHARED = 'SHARED',
+}

@@ -5,14 +5,16 @@ import { Button } from "@/components/ui/Button";
 import { Label } from "@/components/ui/Label";
 import { Textarea } from "@/components/ui/Textarea";
 import { motion } from "framer-motion";
+import { NoteType } from "@/types";
+import { InlineChipsInput } from "@/components/ui/InlineChipInput";
+import { validateEmail } from "@/services/email.service";
 
 export const NoteForm: React.FC<{ onSubmit: (note: any) => void }> = ({ onSubmit }) => {
     const [formData, setFormData] = useState({
         title: "",
         content: "",
-        status: "draft",
-        type: "personal",
-        sharedWith: "",
+        type: NoteType.PERSONAL,
+        sharedWith: [] as string[],
     });
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
@@ -22,15 +24,7 @@ export const NoteForm: React.FC<{ onSubmit: (note: any) => void }> = ({ onSubmit
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-
-        const note = {
-            ...formData,
-            sharedWith: formData.sharedWith
-                ? formData.sharedWith.split(",").map(email => email.trim())
-                : [],
-        };
-
-        onSubmit(note);
+        onSubmit(formData);
     };
 
     return (
@@ -70,22 +64,6 @@ export const NoteForm: React.FC<{ onSubmit: (note: any) => void }> = ({ onSubmit
                         </div>
 
                         <div>
-                            <Label htmlFor="status">Status</Label>
-                            <select
-                                id="status"
-                                name="status"
-                                value={formData.status}
-                                onChange={handleChange}
-                                className="w-full border rounded-lg p-2"
-                                required
-                            >
-                                <option value="draft">Draft</option>
-                                <option value="published">Published</option>
-                                <option value="archived">Archived</option>
-                            </select>
-                        </div>
-
-                        <div>
                             <Label htmlFor="type">Type</Label>
                             <select
                                 id="type"
@@ -95,22 +73,23 @@ export const NoteForm: React.FC<{ onSubmit: (note: any) => void }> = ({ onSubmit
                                 className="w-full border rounded-lg p-2"
                                 required
                             >
-                                <option value="personal">Personal</option>
-                                <option value="work">Work</option>
-                                <option value="study">Study</option>
+                                <option value={NoteType.PERSONAL}>Personal</option>
+                                <option value={NoteType.SHARED}>Shared</option>
                             </select>
                         </div>
 
-                        <div>
-                            <Label htmlFor="sharedWith">Shared With (comma separated emails)</Label>
-                            <Input
-                                id="sharedWith"
-                                name="sharedWith"
-                                value={formData.sharedWith}
-                                onChange={handleChange}
-                                placeholder="example1@mail.com, example2@mail.com"
-                            />
-                        </div>
+                        {formData.type === NoteType.SHARED && (
+                            <div>
+                                <Label htmlFor="sharedWith">Shared With</Label>
+                                <InlineChipsInput
+                                    value={formData.sharedWith}
+                                    onChange={(newEmails: string[]) =>
+                                        setFormData(prev => ({ ...prev, sharedWith: newEmails.filter(validateEmail) }))
+                                    }
+                                    placeholder="Type emails and press Enter"
+                                />
+                            </div>
+                        )}
 
                         <Button type="submit" className="w-full">
                             Create Note
