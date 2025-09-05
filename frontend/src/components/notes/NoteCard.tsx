@@ -34,7 +34,7 @@ const NoteCard: React.FC<NoteCardProps> = ({ note, onEdit, onDelete }) => {
             <div className="flex justify-between items-start mb-4">
                 <h3 className="text-lg font-semibold text-gray-800">{note.title}</h3>
                 <div className="flex items-center space-x-2">
-                    <span className="text-xs text-gray-500">{formatDate(note.updatedAt)}</span>
+                    <span className="text-xs text-gray-500">{formatDate(note.updatedAt!)}</span>
                     <Badge
                         variant={note.isShared ? 'success' : 'primary'}
                         size="sm"
@@ -57,7 +57,7 @@ const NoteCard: React.FC<NoteCardProps> = ({ note, onEdit, onDelete }) => {
                         <Icon name="edit" size="sm" />
                     </button>
                     <button
-                        onClick={() => onDelete?.(note.id)}
+                        onClick={() => onDelete?.(note.id!)}
                         className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
                     >
                         <Icon name="delete" size="sm" />
@@ -65,7 +65,7 @@ const NoteCard: React.FC<NoteCardProps> = ({ note, onEdit, onDelete }) => {
                 </div>
                 <div className="flex items-center text-xs text-gray-500">
                     <Icon name="time" size="sm" className="mr-1" />
-                    {formatTime(note.updatedAt)}
+                    {formatTime(note.updatedAt!)}
                 </div>
             </div>
         </Card>

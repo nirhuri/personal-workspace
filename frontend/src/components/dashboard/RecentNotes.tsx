@@ -42,7 +42,7 @@ const RecentNotes: React.FC<RecentNotesProps> = ({ notes, onNoteClick }) => {
                                         : note.content}
                                 </p>
                                 <span className="inline-block mt-2 text-xs text-gray-500">
-                                    {formatDate(note.updatedAt)}
+                                    {formatDate(note.updatedAt!)}
                                 </span>
                             </div>
                             <Badge

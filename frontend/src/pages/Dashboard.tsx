@@ -2,10 +2,9 @@ import React from 'react';
 import RecentNotes from '../components/dashboard/RecentNotes';
 import RecentTasks from '../components/dashboard/RecentTasks';
 import UpcomingEvents from '../components/dashboard/UpcomingEvents';
-import { Note, Task, CalendarEvent } from '../types';
+import { Note, Task, CalendarEvent, NoteType } from '../types';
 
 const Dashboard: React.FC = () => {
-    // Mock data - בהמשך זה יבוא מה-API
     const mockNotes: Note[] = [
         {
             id: '1',
@@ -13,6 +12,7 @@ const Dashboard: React.FC = () => {
             content: 'דיון על דרישות הפרויקט החדש. צריך להכין מצגת עם האפשרויות השונות ולבדוק את התקציב.',
             createdAt: new Date(),
             updatedAt: new Date(),
+            type: NoteType.PERSONAL,
             isShared: false,
             createdBy: 'user1'
         },
@@ -22,6 +22,8 @@ const Dashboard: React.FC = () => {
             content: 'רשימת רעיונות לפיתוח האפליקציה: אינטגרציה עם Slack, התראות מתקדמות, תמיכה ב-dark mode.',
             createdAt: new Date(Date.now() - 86400000),
             updatedAt: new Date(Date.now() - 86400000),
+            type: NoteType.SHARED,
+            sharedWithList: ["user22", "user1", "user532", "user234"],
             isShared: true,
             createdBy: 'user1'
         }

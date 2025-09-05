@@ -5,16 +5,18 @@ import { Button } from "@/components/ui/Button";
 import { Label } from "@/components/ui/Label";
 import { Textarea } from "@/components/ui/Textarea";
 import { motion } from "framer-motion";
-import { NoteType } from "@/types";
+import { Note, NoteType } from "@/types";
 import { InlineChipsInput } from "@/components/ui/InlineChipInput";
 import { validateEmail } from "@/services/email.service";
 
-export const NoteForm: React.FC<{ onSubmit: (note: any) => void }> = ({ onSubmit }) => {
+export const NoteForm: React.FC<{ onSubmit: (note: Note) => void }> = ({ onSubmit }) => {
     const [formData, setFormData] = useState({
         title: "",
         content: "",
         type: NoteType.PERSONAL,
-        sharedWith: [] as string[],
+        isShared: false,
+        createdBy: "user123",
+        sharedWithList: [] as string[],
     });
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
@@ -82,7 +84,7 @@ export const NoteForm: React.FC<{ onSubmit: (note: any) => void }> = ({ onSubmit
                             <div>
                                 <Label htmlFor="sharedWith">Shared With</Label>
                                 <InlineChipsInput
-                                    value={formData.sharedWith}
+                                    value={formData.sharedWithList}
                                     onChange={(newEmails: string[]) =>
                                         setFormData(prev => ({ ...prev, sharedWith: newEmails.filter(validateEmail) }))
                                     }

@@ -10,13 +10,15 @@ export interface User {
 
 // Note types
 export interface Note {
-    id: string;
+    id?: string;
     title: string;
     content: string;
+    type: NoteType;
     isShared: boolean;
-    createdAt: Date;
-    updatedAt: Date;
+    sharedWithList?: string[];
     createdBy: string;
+    createdAt?: Date;
+    updatedAt?: Date;
     tags?: string[];
     color?: string;
 }

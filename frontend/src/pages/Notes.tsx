@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import PageHeader from '../components/layout/PageHeader';
 import NoteCard from '../components/notes/NoteCard';
-import { Note } from '../types';
+import { Note, NoteType } from '../types';
 import { NoteForm } from '../components/notes/NoteForm';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -15,6 +15,7 @@ const Notes: React.FC = () => {
                 'דיון על דרישות הפרויקט החדש. צריך להכין מצגת עם האפשרויות השונות ולבדוק את התקציב.',
             createdAt: new Date(),
             updatedAt: new Date(),
+            type: NoteType.PERSONAL,
             isShared: false,
             createdBy: 'user1',
         },
@@ -25,6 +26,8 @@ const Notes: React.FC = () => {
                 'רשימת רעיונות לפיתוח האפליקציה: אינטגרציה עם Slack, התראות מתקדמות, תמיכה ב-dark mode.',
             createdAt: new Date(Date.now() - 86400000),
             updatedAt: new Date(Date.now() - 86400000),
+            type: NoteType.SHARED,
+            sharedWithList: ["user1", "user122", "user34"],
             isShared: true,
             createdBy: 'user1',
         },
@@ -35,6 +38,7 @@ const Notes: React.FC = () => {
                 'חלב, לחם, ירקות, בשר, תבלינים. לא לשכוח לקנות גם פירות וירקות טריים.',
             createdAt: new Date(Date.now() - 259200000),
             updatedAt: new Date(Date.now() - 259200000),
+            type: NoteType.PERSONAL,
             isShared: false,
             createdBy: 'user1',
         },
@@ -46,15 +50,17 @@ const Notes: React.FC = () => {
         setIsModalOpen(true);
     };
 
-    const handleCreateNote = (note: any) => {
+    const handleCreateNote = (note: Note) => {
         const newNote: Note = {
             id: (notes.length + 1).toString(),
             title: note.title,
             content: note.content,
-            createdAt: new Date(),
-            updatedAt: new Date(),
-            isShared: note.type !== 'personal',
+            type: note.type,
+            isShared: note.type !== NoteType.PERSONAL,
+            sharedWithList: note.sharedWithList,
             createdBy: 'user1',
+            createdAt: new Date(),
+            updatedAt: new Date()
         };
         setNotes([newNote, ...notes]);
         setIsModalOpen(false);
