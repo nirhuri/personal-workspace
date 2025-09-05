@@ -1,11 +1,10 @@
-// lib/api.ts
 import axios from "axios";
 
-const api = axios.create({
+const apiClient = axios.create({
     baseURL: "http://localhost:3001",
 });
 
-api.interceptors.request.use((config) => {
+apiClient.interceptors.request.use((config) => {
     const token = localStorage.getItem("accessToken");
     if (token) {
         config.headers = config.headers || {};
@@ -14,4 +13,4 @@ api.interceptors.request.use((config) => {
     return config;
 });
 
-export default api;
+export default apiClient;
