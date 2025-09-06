@@ -24,8 +24,11 @@ export class EventStoreDocument extends Document {
     @Prop({ required: true })
     occurredOn: Date;
 
-    @Prop({ required: true })
+    @Prop({ default: Date.now })
     createdAt: Date;
+
+    @Prop({ default: Date.now })
+    updatedAt: Date;
 }
 
 export const EventStoreSchema = SchemaFactory.createForClass(EventStoreDocument);

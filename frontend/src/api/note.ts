@@ -15,7 +15,7 @@ export const notesApi = {
     },
     createNote: async (note: Note): Promise<Note> => {
         try {
-            const { data } = await apiClient.post<Note>('/notes', { data: note });
+            const { data } = await apiClient.post<Note>('/notes', note);
             console.log(data)
             return data;
         } catch (err: unknown) {

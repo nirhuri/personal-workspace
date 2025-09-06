@@ -13,20 +13,21 @@ interface NoteCardProps {
 const NoteCard: React.FC<NoteCardProps> = ({ note, onEdit, onDelete }) => {
     const formatDate = (date: Date) => {
         const now = new Date();
-        const diffTime = Math.abs(now.getTime() - date.getTime());
+        const newDate = new Date(date);
+        const diffTime = Math.abs(now.getTime() - newDate.getTime());
         const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 
         if (diffDays === 0) return 'היום';
         if (diffDays === 1) return 'אתמול';
         if (diffDays < 7) return `לפני ${diffDays} ימים`;
-        return date.toLocaleDateString('he-IL');
+        return newDate.toLocaleDateString('he-IL');
     };
 
     const formatTime = (date: Date) => {
-        return date.toLocaleTimeString('he-IL', {
+        return String(new Date(date.toLocaleTimeString('he-IL', {
             hour: '2-digit',
             minute: '2-digit'
-        });
+        })));
     };
 
     return (
@@ -65,7 +66,7 @@ const NoteCard: React.FC<NoteCardProps> = ({ note, onEdit, onDelete }) => {
                 </div>
                 <div className="flex items-center text-xs text-gray-500">
                     <Icon name="time" size="sm" className="mr-1" />
-                    {formatTime(note.updatedAt!)}
+                    {formatTime(note?.updatedAt || new Date())}
                 </div>
             </div>
         </Card>

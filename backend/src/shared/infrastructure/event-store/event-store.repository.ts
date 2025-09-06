@@ -22,7 +22,15 @@ export class EventStoreRepository {
     ) { }
 
     async save(event: DomainEvent, aggregateType: string): Promise<void> {
+        console.log('Event data:', {
+            eventId: event.eventId,
+            aggregateId: event.aggregateId,
+            version: event.version,
+            occurredOn: event.occurredOn
+        });
+
         const storedEvent = new this.eventStoreModel({
+            eventId: event.eventId,
             aggregateId: event.aggregateId,
             aggregateType,
             eventType: event.getEventName(),

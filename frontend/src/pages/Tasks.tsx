@@ -5,7 +5,6 @@ import Card from '../components/ui/Card';
 import { Task } from '../types';
 
 const Tasks: React.FC = () => {
-    // Mock data - בהמשך זה יבוא מה-API
     const mockActiveTasks: Task[] = [
         {
             id: '1',
