@@ -16,7 +16,7 @@ export interface Note {
     type: NoteType;
     isShared: boolean;
     sharedWith?: string[];
-    createdBy: string;
+    createdBy?: string; // Optional - comes from backend
     createdAt?: Date;
     updatedAt?: Date;
     tags?: string[];

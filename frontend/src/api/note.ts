@@ -1,13 +1,13 @@
 import { Note } from '@/types';
 import apiClient from './client';
 import { processAPIError } from './api-error';
+import { processResponseFromServer } from './api-interceptor';
 
 export const notesApi = {
     getNotes: async (): Promise<Note[]> => {
         try {
-            const { data } = await apiClient.get<Note[]>('/notes');
-            console.log(data)
-            return data;
+            const { data } = await apiClient.get<{ data: Note[] }>('/notes/created');
+            return processResponseFromServer(data) as Note[];
         } catch (err: unknown) {
             processAPIError(err, 'notes');
             throw err;
@@ -15,8 +15,15 @@ export const notesApi = {
     },
     createNote: async (note: Note): Promise<Note> => {
         try {
-            const { data } = await apiClient.post<Note>('/notes', note);
-            console.log(data)
+            const noteData = {
+                title: note.title,
+                content: note.content,
+                type: note.type,
+                sharedWith: note.sharedWith || []
+            };
+            console.log("createNote - before", noteData)
+            const { data } = await apiClient.post<Note>('/notes', noteData);
+            console.log("createNote - after", data)
             return data;
         } catch (err: unknown) {
             processAPIError(err, 'notes');

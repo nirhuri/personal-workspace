@@ -10,10 +10,6 @@ export class CreateNoteDto {
     @IsNotEmpty()
     content: string;
 
-    @IsString()
-    @IsNotEmpty()
-    createdBy: string;
-
     @IsEnum(NoteType)
     type: NoteType;
 

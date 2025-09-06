@@ -12,20 +12,28 @@ export const useCreateNote = () => {
         { previousNotes?: Note[] }
     >({
         mutationFn: (note: Note) => notesApi.createNote(note),
+
         onMutate: async (note: Note) => {
-            await queryClient.cancelQueries({ queryKey: ['notes'] });
-            const previousNotes = queryClient.getQueryData<Note[]>(['notes']);
-            queryClient.setQueryData<Note[]>(['notes'], old => [...(old ?? []), note]);
+            await queryClient.cancelQueries({ queryKey: ["notes"] });
+
+            const previousNotes = queryClient.getQueryData<Note[]>(["notes"]);
+
+            queryClient.setQueryData<Note[]>(["notes"], (old) =>
+                Array.isArray(old) ? [...old, note] : [note]
+            );
+
             return { previousNotes };
         },
-        onError: (err: unknown, note: Note, context?: { previousNotes?: Note[] }) => {
+
+        onError: (err, note, context) => {
             if (context?.previousNotes) {
-                queryClient.setQueryData<Note[]>(['notes'], context.previousNotes);
+                queryClient.setQueryData(["notes"], context.previousNotes);
             }
-            alert('Failed to create note');
+            alert("Failed to create note");
         },
+
         onSettled: () => {
-            queryClient.invalidateQueries({ queryKey: ['notes'] });
-        }
+            queryClient.invalidateQueries({ queryKey: ["notes"] });
+        },
     });
 };

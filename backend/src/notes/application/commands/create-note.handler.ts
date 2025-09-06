@@ -17,9 +17,9 @@ export class CreateNoteHandler implements CommandHandler<CreateNoteCommand> {
 
     async execute(command: CreateNoteCommand): Promise<void> {
         const note = Note.create(
+            command.createdBy,
             command.title,
             command.content,
-            command.createdBy,
             command.type as NoteType,
             command.sharedWith
         );

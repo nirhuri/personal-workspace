@@ -15,7 +15,6 @@ export const NoteForm: React.FC<{ onSubmit: (note: Note) => void }> = ({ onSubmi
         content: "",
         type: NoteType.PERSONAL,
         isShared: false,
-        createdBy: "user123",
         sharedWith: [] as string[],
     });
 
@@ -26,7 +25,15 @@ export const NoteForm: React.FC<{ onSubmit: (note: Note) => void }> = ({ onSubmi
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        onSubmit(formData);
+        // Convert form data to Note format expected by backend
+        const noteData: Note = {
+            title: formData.title,
+            content: formData.content,
+            type: formData.type,
+            isShared: formData.type === NoteType.SHARED,
+            sharedWith: formData.sharedWith
+        };
+        onSubmit(noteData);
     };
 
     return (

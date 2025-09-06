@@ -11,23 +11,26 @@ interface NoteCardProps {
 }
 
 const NoteCard: React.FC<NoteCardProps> = ({ note, onEdit, onDelete }) => {
+
+    console.log(note)
     const formatDate = (date: Date) => {
         const now = new Date();
         const newDate = new Date(date);
         const diffTime = Math.abs(now.getTime() - newDate.getTime());
         const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 
-        if (diffDays === 0) return 'היום';
-        if (diffDays === 1) return 'אתמול';
-        if (diffDays < 7) return `לפני ${diffDays} ימים`;
+        if (diffDays === 0) return 'Today';
+        if (diffDays === 1) return 'Yesterday';
+        if (diffDays < 7) return `Before ${diffDays} days`;
         return newDate.toLocaleDateString('he-IL');
     };
 
     const formatTime = (date: Date) => {
-        return String(new Date(date.toLocaleTimeString('he-IL', {
+        const d = new Date(date);
+        return d.toLocaleTimeString('he-IL', {
             hour: '2-digit',
             minute: '2-digit'
-        })));
+        });
     };
 
     return (
@@ -40,7 +43,7 @@ const NoteCard: React.FC<NoteCardProps> = ({ note, onEdit, onDelete }) => {
                         variant={note.isShared ? 'success' : 'primary'}
                         size="sm"
                     >
-                        {note.isShared ? 'משותף' : 'אישי'}
+                        {note.isShared ? 'Shared' : 'Personal'}
                     </Badge>
                 </div>
             </div>
@@ -66,7 +69,7 @@ const NoteCard: React.FC<NoteCardProps> = ({ note, onEdit, onDelete }) => {
                 </div>
                 <div className="flex items-center text-xs text-gray-500">
                     <Icon name="time" size="sm" className="mr-1" />
-                    {formatTime(note?.updatedAt || new Date())}
+                    {formatTime(note.updatedAt!)}
                 </div>
             </div>
         </Card>

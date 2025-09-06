@@ -2,52 +2,25 @@
 import React, { useState } from 'react';
 import PageHeader from '../components/layout/PageHeader';
 import NoteCard from '../components/notes/NoteCard';
-import { Note, NoteType } from '../types';
+import { Note } from '../types';
 import { NoteForm } from '../components/notes/NoteForm';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useQuery } from "@tanstack/react-query";
 import { useCreateNote } from "@/hooks/useCreateNote";
-
-// ⚠️ זמני: נחליף ב־API אמיתי
-const fetchNotes = async (): Promise<Note[]> => {
-    return [
-        {
-            id: '1',
-            title: 'פגישה עם הלקוח',
-            content:
-                'דיון על דרישות הפרויקט החדש. צריך להכין מצגת עם האפשרויות השונות ולבדוק את התקציב.',
-            createdAt: new Date(),
-            updatedAt: new Date(),
-            type: NoteType.PERSONAL,
-            isShared: false,
-            createdBy: 'user1',
-        },
-        {
-            id: '2',
-            title: "רעיונות לפיצ'רים",
-            content:
-                'רשימת רעיונות לפיתוח האפליקציה: אינטגרציה עם Slack, התראות מתקדמות, תמיכה ב-dark mode.',
-            createdAt: new Date(Date.now() - 86400000),
-            updatedAt: new Date(Date.now() - 86400000),
-            type: NoteType.SHARED,
-            sharedWith: ["user1", "user122", "user34"],
-            isShared: true,
-            createdBy: 'user1',
-        },
-    ];
-};
+import { notesApi } from '@/api/note';
 
 const Notes: React.FC = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
 
-    // notes query
-    const { data: notes = [], isLoading } = useQuery({
+    const { data: notes = [], isLoading, isError } = useQuery({
         queryKey: ["notes"],
-        queryFn: fetchNotes,
+        queryFn: notesApi.getNotes,
     });
 
-    // create note mutation
     const createNote = useCreateNote();
+
+    if (isLoading) return <p>Loading...</p>;
+    if (isError) return <p>Error loading notes</p>;
 
     const handleAddNote = () => {
         setIsModalOpen(true);
@@ -63,7 +36,6 @@ const Notes: React.FC = () => {
 
     const handleEditNote = (note: Note) => {
         console.log('Edit note:', note);
-        // כאן תוכל לפתוח את המודל עם הערך הקיים לעריכה
     };
 
     const handleDeleteNote = (noteId: string) => {
@@ -83,8 +55,8 @@ const Notes: React.FC = () => {
                 />
 
                 {isLoading ? (
-                    <p>טוען פתקים...</p>
-                ) : (
+                    <p>Loading...</p>
+                ) : notes.length > 0 ? (
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                         {notes.map((note) => (
                             <NoteCard
@@ -95,7 +67,7 @@ const Notes: React.FC = () => {
                             />
                         ))}
                     </div>
-                )}
+                ) : <p className="text-gray-500 text-center mt-10">Create a note to view in you note list</p>}
             </div>
 
             {/* Modal */}
