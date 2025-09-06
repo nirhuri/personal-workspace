@@ -16,7 +16,7 @@ export const NoteForm: React.FC<{ onSubmit: (note: Note) => void }> = ({ onSubmi
         type: NoteType.PERSONAL,
         isShared: false,
         createdBy: "user123",
-        sharedWithList: [] as string[],
+        sharedWith: [] as string[],
     });
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
@@ -84,7 +84,7 @@ export const NoteForm: React.FC<{ onSubmit: (note: Note) => void }> = ({ onSubmi
                             <div>
                                 <Label htmlFor="sharedWith">Shared With</Label>
                                 <InlineChipsInput
-                                    value={formData.sharedWithList}
+                                    value={formData.sharedWith}
                                     onChange={(newEmails: string[]) =>
                                         setFormData(prev => ({ ...prev, sharedWith: newEmails.filter(validateEmail) }))
                                     }

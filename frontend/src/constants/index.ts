@@ -55,44 +55,6 @@ export const DATE_FORMATS = {
     relative: 'relative',
 };
 
-// API endpoints
-export const API_ENDPOINTS = {
-    // Auth
-    LOGIN: '/auth/google',
-    LOGOUT: '/auth/logout',
-    REFRESH: '/auth/refresh',
-
-    // Notes
-    NOTES: '/notes',
-    NOTE: (id: string) => `/notes/${id}`,
-    NOTE_SHARE: (id: string) => `/notes/${id}/share`,
-
-    // Tasks
-    TASKS: '/tasks',
-    TASK: (id: string) => `/tasks/${id}`,
-    TASK_TOGGLE: (id: string) => `/tasks/${id}/toggle`,
-    TASK_SHARE: (id: string) => `/tasks/${id}/share`,
-
-    // Events
-    EVENTS: '/events',
-    EVENT: (id: string) => `/events/${id}`,
-    EVENT_SHARE: (id: string) => `/events/${id}/share`,
-
-    // Users
-    USERS: '/users',
-    USER: (id: string) => `/users/${id}`,
-    USER_PROFILE: '/users/profile',
-    USER_SETTINGS: '/users/settings',
-
-    // Search
-    SEARCH: '/search',
-
-    // Notifications
-    NOTIFICATIONS: '/notifications',
-    NOTIFICATION: (id: string) => `/notifications/${id}`,
-    NOTIFICATION_READ: (id: string) => `/notifications/${id}/read`,
-};
-
 // Local storage keys
 export const STORAGE_KEYS = {
     USER: 'user',

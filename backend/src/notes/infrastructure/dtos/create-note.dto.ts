@@ -4,21 +4,21 @@ import { NoteType } from '../../domain/entities/note.entity';
 export class CreateNoteDto {
     @IsString()
     @IsNotEmpty()
-    readonly title: string;
+    title: string;
 
     @IsString()
     @IsNotEmpty()
-    readonly content: string;
+    content: string;
 
     @IsString()
     @IsNotEmpty()
-    readonly createdBy: string;
+    createdBy: string;
 
     @IsEnum(NoteType)
-    readonly type: NoteType;
+    type: NoteType;
 
     @IsOptional()
     @IsArray()
     @IsString({ each: true })
-    readonly sharedWith?: string[];
+    sharedWith?: string[];
 } 

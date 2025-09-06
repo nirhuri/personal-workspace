@@ -1,7 +1,7 @@
 
 export const Login = () => {
     const handleLogin = () => {
-        window.location.href = "http://localhost:3001/auth/google";
+        window.location.href = "http://localhost:3001/api/v1/auth/google";
     };
 
     return (

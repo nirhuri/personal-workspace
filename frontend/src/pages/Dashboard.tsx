@@ -23,7 +23,7 @@ const Dashboard: React.FC = () => {
             createdAt: new Date(Date.now() - 86400000),
             updatedAt: new Date(Date.now() - 86400000),
             type: NoteType.SHARED,
-            sharedWithList: ["user22", "user1", "user532", "user234"],
+            sharedWith: ["user22", "user1", "user532", "user234"],
             isShared: true,
             createdBy: 'user1'
         }

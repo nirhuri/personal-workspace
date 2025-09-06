@@ -5,9 +5,12 @@ import NoteCard from '../components/notes/NoteCard';
 import { Note, NoteType } from '../types';
 import { NoteForm } from '../components/notes/NoteForm';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useQuery } from "@tanstack/react-query";
+import { useCreateNote } from "@/hooks/useCreateNote";
 
-const Notes: React.FC = () => {
-    const [notes, setNotes] = useState<Note[]>([
+// ⚠️ זמני: נחליף ב־API אמיתי
+const fetchNotes = async (): Promise<Note[]> => {
+    return [
         {
             id: '1',
             title: 'פגישה עם הלקוח',
@@ -27,43 +30,35 @@ const Notes: React.FC = () => {
             createdAt: new Date(Date.now() - 86400000),
             updatedAt: new Date(Date.now() - 86400000),
             type: NoteType.SHARED,
-            sharedWithList: ["user1", "user122", "user34"],
+            sharedWith: ["user1", "user122", "user34"],
             isShared: true,
             createdBy: 'user1',
         },
-        {
-            id: '3',
-            title: 'רשימת קניות',
-            content:
-                'חלב, לחם, ירקות, בשר, תבלינים. לא לשכוח לקנות גם פירות וירקות טריים.',
-            createdAt: new Date(Date.now() - 259200000),
-            updatedAt: new Date(Date.now() - 259200000),
-            type: NoteType.PERSONAL,
-            isShared: false,
-            createdBy: 'user1',
-        },
-    ]);
+    ];
+};
 
+const Notes: React.FC = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
+
+    // notes query
+    const { data: notes = [], isLoading } = useQuery({
+        queryKey: ["notes"],
+        queryFn: fetchNotes,
+    });
+
+    // create note mutation
+    const createNote = useCreateNote();
 
     const handleAddNote = () => {
         setIsModalOpen(true);
     };
 
     const handleCreateNote = (note: Note) => {
-        const newNote: Note = {
-            id: (notes.length + 1).toString(),
-            title: note.title,
-            content: note.content,
-            type: note.type,
-            isShared: note.type !== NoteType.PERSONAL,
-            sharedWithList: note.sharedWithList,
-            createdBy: 'user1',
-            createdAt: new Date(),
-            updatedAt: new Date()
-        };
-        setNotes([newNote, ...notes]);
-        setIsModalOpen(false);
+        createNote.mutate(note, {
+            onSuccess: () => {
+                setIsModalOpen(false);
+            },
+        });
     };
 
     const handleEditNote = (note: Note) => {
@@ -72,7 +67,8 @@ const Notes: React.FC = () => {
     };
 
     const handleDeleteNote = (noteId: string) => {
-        setNotes(notes.filter((note) => note.id !== noteId));
+        console.log("Delete note", noteId);
+        // בהמשך נממש useDeleteNote
     };
 
     return (
@@ -86,16 +82,20 @@ const Notes: React.FC = () => {
                     onAction={handleAddNote}
                 />
 
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {notes.map((note) => (
-                        <NoteCard
-                            key={note.id}
-                            note={note}
-                            onEdit={handleEditNote}
-                            onDelete={handleDeleteNote}
-                        />
-                    ))}
-                </div>
+                {isLoading ? (
+                    <p>טוען פתקים...</p>
+                ) : (
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        {notes.map((note) => (
+                            <NoteCard
+                                key={note.id}
+                                note={note}
+                                onEdit={handleEditNote}
+                                onDelete={handleDeleteNote}
+                            />
+                        ))}
+                    </div>
+                )}
             </div>
 
             {/* Modal */}
