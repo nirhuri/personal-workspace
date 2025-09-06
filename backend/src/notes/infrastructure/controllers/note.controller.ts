@@ -3,6 +3,7 @@ import { AuthGuard } from '@nestjs/passport';
 import { NoteService } from '../../application/services/note.service';
 import { CreateNoteDto } from '../dtos/create-note.dto';
 import { Note } from '../../domain/entities/note.entity';
+import { NoteDto } from '../dtos/note.dto';
 
 @Controller('notes')
 @UseGuards(AuthGuard('jwt'))
@@ -12,28 +13,33 @@ export class NoteController {
     ) { }
 
     @Get('created')
-    async getNotesByCreatedBy(@Req() req: any): Promise<Note[]> {
-        return await this.noteService.getNotesByCreatedBy(req.user.userId);
+    async getNotesByCreatedBy(@Req() req: any): Promise<NoteDto[]> {
+        const notes = await this.noteService.getNotesByCreatedBy(req.user.userId);
+        return notes.map(note => new NoteDto(note));
     }
 
     @Get('shared')
-    async getNotesSharedWith(@Req() req: any): Promise<Note[]> {
-        return await this.noteService.getNotesSharedWith(req.user.userId);
+    async getNotesSharedWith(@Req() req: any): Promise<NoteDto[]> {
+        const notes = await this.noteService.getNotesSharedWith(req.user.userId);
+        return notes.map(note => new NoteDto(note));
     }
 
     @Get('accessible')
-    async getAccessibleNotes(@Req() req: any): Promise<Note[]> {
-        return await this.noteService.getAccessibleNotes(req.user.userId);
+    async getAccessibleNotes(@Req() req: any): Promise<NoteDto[]> {
+        const notes = await this.noteService.getAccessibleNotes(req.user.userId);
+        return notes.map(note => new NoteDto(note));
     }
 
     @Get('status/:status')
-    async getNotesByStatus(@Param('status') status: string): Promise<Note[]> {
-        return await this.noteService.getNotesByStatus(status);
+    async getNotesByStatus(@Param('status') status: string): Promise<NoteDto[]> {
+        const notes = await this.noteService.getNotesByStatus(status);
+        return notes.map(note => new NoteDto(note));
     }
 
     @Get('type/:type')
-    async getNotesByType(@Param('type') type: string): Promise<Note[]> {
-        return await this.noteService.getNotesByType(type);
+    async getNotesByType(@Param('type') type: string): Promise<NoteDto[]> {
+        const notes = await this.noteService.getNotesByType(type);
+        return notes.map(note => new NoteDto(note));
     }
 
     @Post(':id/share')
@@ -82,13 +88,15 @@ export class NoteController {
     }
 
     @Get(':id')
-    async getNote(@Param('id') id: string): Promise<Note | null> {
-        return await this.noteService.getNote(id);
+    async getNote(@Param('id') id: string): Promise<NoteDto | null> {
+        const note = await this.noteService.getNote(id);
+        return note ? new NoteDto(note) : null;
     }
 
     @Post()
-    async createNote(@Body() createNoteDto: CreateNoteDto, @Req() req: any): Promise<{ message: string; noteId: string }> {
-        console.log('createNote')
+    async createNote(
+        @Body() createNoteDto: CreateNoteDto,
+        @Req() req: any): Promise<{ message: string; noteId: string }> {
         return await this.noteService.createNote({
             title: createNoteDto.title,
             content: createNoteDto.content,
@@ -99,7 +107,8 @@ export class NoteController {
     }
 
     @Get()
-    async getNotes(@Req() req: any): Promise<Note[]> {
-        return await this.noteService.getAccessibleNotes(req.user.userId);
+    async getNotes(@Req() req: any): Promise<NoteDto[]> {
+        const notes = await this.noteService.getAccessibleNotes(req.user.userId);
+        return notes.map(note => new NoteDto(note));
     }
 } 
