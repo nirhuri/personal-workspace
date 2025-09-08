@@ -1,46 +1,47 @@
 // pages/Notes.tsx
-import React, { useState } from 'react';
-import PageHeader from '../components/layout/PageHeader';
-import NoteCard from '../components/notes/NoteCard';
-import { Note } from '../types';
-import { NoteForm } from '../components/notes/NoteForm';
-import { motion, AnimatePresence } from 'framer-motion';
-import { useQuery } from "@tanstack/react-query";
-import { useCreateNote } from "@/hooks/useCreateNote";
-import { notesApi } from '@/api/note';
+import React, { useState } from "react";
+import PageHeader from "../components/layout/PageHeader";
+import NoteCard from "../components/notes/NoteCard";
+import { Note } from "../types";
+import { NoteForm } from "../components/notes/NoteForm";
+import { motion, AnimatePresence } from "framer-motion";
+import { useCrud } from "@/hooks/useCrud";
+import { notesApi } from "@/api/note";
 
 const Notes: React.FC = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [editingNote, setEditingNote] = useState<Note | null>(null);
 
-    const { data: notes = [], isLoading, isError } = useQuery({
-        queryKey: ["notes"],
-        queryFn: notesApi.getNotes,
-    });
+    const { list, create, update, remove } = useCrud<Note>("notes", notesApi);
 
-    const createNote = useCreateNote();
+    if (list.isLoading) return <p>Loading...</p>;
+    if (list.isError) return <p>Error loading notes</p>;
 
-    if (isLoading) return <p>Loading...</p>;
-    if (isError) return <p>Error loading notes</p>;
+    const handleOpenModal = () => {
+        setIsModalOpen(true);
+        setEditingNote(null);
+    }
 
-    const handleAddNote = () => {
+    const handleSubmitNote = (note: Partial<Note>) => {
+        if (editingNote) {
+            update.mutate(
+                { id: editingNote.id!, data: note },
+                { onSuccess: () => setIsModalOpen(false) }
+            );
+        } else {
+            create.mutate(note, {
+                onSuccess: () => setIsModalOpen(false)
+            });
+        }
+    }
+
+    const handleEditNote = (note: Note) => {
+        setEditingNote(note);
         setIsModalOpen(true);
     };
 
-    const handleCreateNote = (note: Note) => {
-        createNote.mutate(note, {
-            onSuccess: () => {
-                setIsModalOpen(false);
-            },
-        });
-    };
-
-    const handleEditNote = (note: Note) => {
-        console.log('Edit note:', note);
-    };
-
     const handleDeleteNote = (noteId: string) => {
-        console.log("Delete note", noteId);
-        // בהמשך נממש useDeleteNote
+        remove.mutate(noteId);
     };
 
     return (
@@ -51,14 +52,12 @@ const Notes: React.FC = () => {
                     subtitle="נהל את הפתקים שלך"
                     actionLabel="פתק חדש"
                     actionVariant="primary"
-                    onAction={handleAddNote}
+                    onAction={handleOpenModal}
                 />
 
-                {isLoading ? (
-                    <p>Loading...</p>
-                ) : notes.length > 0 ? (
+                {list.data && list.data.length > 0 ? (
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                        {notes.map((note) => (
+                        {list.data.map((note) => (
                             <NoteCard
                                 key={note.id}
                                 note={note}
@@ -67,7 +66,11 @@ const Notes: React.FC = () => {
                             />
                         ))}
                     </div>
-                ) : <p className="text-gray-500 text-center mt-10">Create a note to view in you note list</p>}
+                ) : (
+                    <p className="text-gray-500 text-center mt-10">
+                        Create a note to view in your note list
+                    </p>
+                )}
             </div>
 
             {/* Modal */}
@@ -91,7 +94,7 @@ const Notes: React.FC = () => {
                             >
                                 ✕
                             </button>
-                            <NoteForm onSubmit={handleCreateNote} />
+                            <NoteForm onSubmit={handleSubmitNote} initialData={editingNote || undefined} />
                         </motion.div>
                     </motion.div>
                 )}

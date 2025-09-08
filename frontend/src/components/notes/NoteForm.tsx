@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Card, { CardContent } from "@/components/ui/Card";
 import { Input } from "@/components/ui/Input";
 import { Button } from "@/components/ui/Button";
@@ -9,7 +9,12 @@ import { Note, NoteType } from "@/types";
 import { InlineChipsInput } from "@/components/ui/InlineChipInput";
 import { validateEmail } from "@/services/email.service";
 
-export const NoteForm: React.FC<{ onSubmit: (note: Note) => void }> = ({ onSubmit }) => {
+interface NoteFormProps {
+    onSubmit: (note: Partial<Note>) => void;
+    initialData?: Partial<Note>;
+}
+
+export const NoteForm: React.FC<NoteFormProps> = ({ onSubmit, initialData }) => {
     const [formData, setFormData] = useState({
         title: "",
         content: "",
@@ -18,6 +23,18 @@ export const NoteForm: React.FC<{ onSubmit: (note: Note) => void }> = ({ onSubmi
         sharedWith: [] as string[],
     });
 
+    useEffect(() => {
+        if (initialData) {
+            setFormData({
+                title: initialData.title || "",
+                content: initialData.content || "",
+                type: initialData.type || NoteType.PERSONAL,
+                isShared: initialData.type === NoteType.SHARED,
+                sharedWith: initialData.sharedWith || [],
+            });
+        }
+    }, []);
+
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
         setFormData(prev => ({ ...prev, [name]: value }));
@@ -25,8 +42,8 @@ export const NoteForm: React.FC<{ onSubmit: (note: Note) => void }> = ({ onSubmi
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        // Convert form data to Note format expected by backend
         const noteData: Note = {
+            ...initialData,
             title: formData.title,
             content: formData.content,
             type: formData.type,
@@ -101,7 +118,7 @@ export const NoteForm: React.FC<{ onSubmit: (note: Note) => void }> = ({ onSubmi
                         )}
 
                         <Button type="submit" className="w-full">
-                            Create Note
+                            {initialData ? "Update Note" : "Create Note"}
                         </Button>
                     </form>
                 </CardContent>

@@ -11,8 +11,6 @@ interface NoteCardProps {
 }
 
 const NoteCard: React.FC<NoteCardProps> = ({ note, onEdit, onDelete }) => {
-
-    console.log(note)
     const formatDate = (date: Date) => {
         const now = new Date();
         const newDate = new Date(date);

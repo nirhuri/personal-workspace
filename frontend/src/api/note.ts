@@ -1,10 +1,10 @@
-import { Note } from '@/types';
-import apiClient from './client';
+import { Note } from "@/types";
+import apiClient from "./client";
 import { processAPIError } from './api-error';
 import { processResponseFromServer } from './api-interceptor';
 
 export const notesApi = {
-    getNotes: async (): Promise<Note[]> => {
+    list: async (): Promise<Note[]> => {
         try {
             const { data } = await apiClient.get<{ data: Note[] }>('/notes/created');
             return processResponseFromServer(data) as Note[];
@@ -13,7 +13,7 @@ export const notesApi = {
             throw err;
         }
     },
-    createNote: async (note: Note): Promise<Note> => {
+    create: async (note: Partial<Note>): Promise<Note> => {
         try {
             const noteData = {
                 title: note.title,
@@ -21,13 +21,24 @@ export const notesApi = {
                 type: note.type,
                 sharedWith: note.sharedWith || []
             };
-            console.log("createNote - before", noteData)
             const { data } = await apiClient.post<Note>('/notes', noteData);
-            console.log("createNote - after", data)
             return data;
         } catch (err: unknown) {
             processAPIError(err, 'notes');
             throw err;
         }
-    }
-}
+    },
+    update: async (id: string, note: Partial<Note>): Promise<Note> => {
+        const res = await apiClient.put(`/notes/${id}`, note);
+        return res.data.data;
+    },
+    remove: async (id: string): Promise<void> => {
+        try {
+            const { data } = await apiClient.delete<string>(`/notes/${id}`);
+            console.log(data);
+        } catch (err: unknown) {
+            processAPIError(err, 'notes');
+            throw err;
+        }
+    },
+};
