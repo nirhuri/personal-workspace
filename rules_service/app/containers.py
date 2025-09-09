@@ -1,20 +1,17 @@
 from dependency_injector import containers, providers
-from app.db.mongo import MongoConnection
-from app.services.rule_engine import RuleEngine
-import os
-from dotenv import load_dotenv
-
-load_dotenv()
+from app.core.database import init_db
+from app.repositories.rule_repository import RuleRepository
+from app.services.rule_service import RuleService
+from app.engine.rule_engine import RuleEngine
 
 
 class Container(containers.DeclarativeContainer):
-    config = providers.Configuration()
+    wiring_config = containers.WiringConfiguration(modules=["app.api.rules"])
 
-    config.mongo_uri.from_env("MONGO_URI")
-    config.mongo_db.from_env("MONGO_DB")
+    db = providers.Singleton(init_db)
 
-    mongo_connection = providers.Singleton(
-        MongoConnection, uri=config.mongo_uri, db_name=config.mongo_db
-    )
-
+    rule_repository = providers.Factory(RuleRepository, db=db)
     rule_engine = providers.Singleton(RuleEngine)
+    rule_service = providers.Factory(
+        RuleService, repo=rule_repository, engine=rule_engine
+    )
