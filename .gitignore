@@ -43,3 +43,36 @@ Desktop.ini
 .pnpm-store
 .cache
 turbo
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.pycache/
+*.pytest_cache/
+*.coverage
+*.egg-info/
+*.egg
+*.log
+
+# Virtual environment
+venv/
+.env
+
+# IDE / Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+*.sublime-project
+*.sublime-workspace
+
+# Docker
+*.env
+*.dockerfile
+docker-compose.override.yml
+
+# OS files
+.DS_Store
+Thumbs.db

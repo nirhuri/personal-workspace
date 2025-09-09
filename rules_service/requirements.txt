@@ -1,0 +1,9 @@
+fastapi==0.111.1
+uvicorn==0.25.0
+pydantic==2.7.1
+pymongo==5.7.0
+python-dotenv==1.0.0
+confluent-kafka==2.2.0
+loguru==0.7.0
+dependency-injector==4.42.0
+pytest==8.2.0
