@@ -2,7 +2,7 @@ from typing import Dict, Type
 
 
 class RuleHandlerRegistry:
-    _registry: Dict[str, "RuleHandler"] = {}
+    _registry: Dict[str, Type["RuleHandler"]] = {}
 
     @classmethod
     def register(cls, type_name: str, handler_cls: Type["RuleHandler"]):
@@ -17,25 +17,27 @@ class RuleHandlerRegistry:
 
 
 class RuleHandler:
+    type_name: str = None
+
+    def __init_subclass__(cls, **kwargs):
+        super().__init_subclass__(**kwargs)
+        if cls.type_name:
+            RuleHandlerRegistry.register(cls.type_name, cls)
+
     def validate(self, data: dict, params: dict) -> bool:
         raise NotImplementedError
 
 
 # ---- Example Handlers ----
 class MaxLengthRule(RuleHandler):
-    def __init_subclass__(cls, **kwargs):
-        super().__init_subclass__(**kwargs)
-        RuleHandlerRegistry.register("max_length", cls)
+    type_name = "max_length"
 
     def validate(self, data: dict, params: dict) -> bool:
         return len(data.get("content", "")) <= params.get("max_length", 5000)
 
 
-class ForbiddenWordRule(RuleHandler):
-    def __init_subclass__(cls, **kwargs):
-        super().__init_subclass__(**kwargs)
-        RuleHandlerRegistry.register("forbidden_word", cls)
+class RequiredFieldRule(RuleHandler):
+    type_name = "required_field"
 
     def validate(self, data: dict, params: dict) -> bool:
-        forbidden = params.get("word", "")
-        return forbidden not in data.get("content", "")
+        return params["field"] in data

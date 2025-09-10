@@ -1,11 +1,15 @@
-from app.core.base_repository import BaseRepository
-from app.models.rule_definition import RuleDefinition
+# app/repositories/rule_repository.py
+from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.future import select
+from app.models.user_rule import UserRule
 
 
-class RuleRepository(BaseRepository[RuleDefinition]):
-    def __init__(self, db):
-        super().__init__(db, "rules")
+class RuleRepository:
+    def __init__(self, session: AsyncSession):
+        self.session = session
 
-    async def get_all_rules(self) -> list[RuleDefinition]:
-        docs = await self.find_all()
-        return [RuleDefinition(**doc) for doc in docs]
+    async def get_rules_by_user(self, user_id: int) -> list[UserRule]:
+        result = await self.session.execute(
+            select(UserRule).where(UserRule.user_id == user_id).options()
+        )
+        return result.scalars().all()
