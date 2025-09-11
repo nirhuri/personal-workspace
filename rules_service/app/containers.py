@@ -9,12 +9,10 @@ from app.services.rule_service import RuleService
 class Container(containers.DeclarativeContainer):
     """Dependency Injection container for the application."""
 
-    wiring_config = containers.WiringConfiguration(
-        modules=["app.api.rules"]  # מאפשר ל־FastAPI לעשות injection ישירות ל־endpoints
-    )
+    wiring_config = containers.WiringConfiguration(modules=["app.api.rules"])
 
     # --- Core infrastructure ---
-    db = providers.Singleton(init_db)  # חיבור DB יחיד בכל האפליקציה
+    db = providers.Singleton(init_db)
 
     # --- Repositories ---
     rule_repository = providers.Factory(
