@@ -1,4 +1,3 @@
-# app/repositories/rule_repository.py
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 from app.models.user_rule import UserRule

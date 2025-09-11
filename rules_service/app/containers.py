@@ -23,6 +23,17 @@ class Container(containers.DeclarativeContainer):
     # --- Engines ---
     rule_engine = providers.Singleton(RuleEngine)
 
+    # --- Messaging ---
+    rule_producer = providers.Singleton(
+        RuleProducer, bootstrap_servers=config.kafka.servers
+    )
+    rule_consumer = providers.Singleton(
+        RuleConsumer,
+        bootstrap_servers=config.kafka.servers,
+        rule_service=rule_service,
+        producer=rule_producer,
+    )
+
     # --- Services ---
     rule_service = providers.Factory(
         RuleService,
